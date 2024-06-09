@@ -13,6 +13,30 @@ provider "aws" {
   region = "us-west-2"
 }
 
+resource "aws_security_group" "allow_ping" {
+  name        = "allow_ping"
+  description = "Allow ICMP traffic for ping"
+
+  ingress {
+    description = "Allow ICMP"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_ping"
+  }
+}
+
 resource "aws_instance" "pdn1" {
   ami           = "ami-0eb9d67c52f5c80e5"
   instance_type = "t2.micro"
@@ -20,8 +44,9 @@ resource "aws_instance" "pdn1" {
   root_block_device {
     volume_size = 30
     volume_type = "gp3"
-
   }
+
+  vpc_security_group_ids = [aws_security_group.allow_ping.id]
 
   tags = {
     Name = "PolkadotNode1"
