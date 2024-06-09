@@ -37,7 +37,8 @@ resource "aws_security_group" "allow_ping" {
   }
 }
 
-resource "aws_instance" "pdn1" {
+resource "aws_instance" "pd_node" {
+  count         = 2
   ami           = "ami-0eb9d67c52f5c80e5"
   instance_type = "t2.micro"
 
@@ -49,6 +50,6 @@ resource "aws_instance" "pdn1" {
   vpc_security_group_ids = [aws_security_group.allow_ping.id]
 
   tags = {
-    Name = "PolkadotNode1"
+    Name = "PolkadotNode${count.index + 1}"
   }
 }
