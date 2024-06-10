@@ -37,17 +37,49 @@ resource "aws_security_group" "allow_ping" {
   }
 }
 
+resource "aws_security_group" "allow_ssh" {
+  name        = "allow_ssh"
+  description = "Allow SSH traffic"
+
+  ingress {
+    description = "Allow SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["91.86.198.212/32"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_ssh"
+  }
+}
+
+resource "aws_key_pair" "my_keypair" {
+  key_name   = "ec2-polkadot-node-keypair"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHm7qAP7h0pU86u9v7VZN2z7mBj0f4sF0SOhD/i62CDj louisevelayo@Louises-MacBook-Pro.local"
+}
+
+# free-tier won't allow me to provision the same specs as outlined in the docs
 resource "aws_instance" "pd_node" {
   count         = 2
   ami           = "ami-0eb9d67c52f5c80e5"
-  instance_type = "t2.micro"
+  instance_type = "t2.micro" # should use bigger instance type to meet network requirements
 
   root_block_device {
     volume_size = 30
     volume_type = "gp3"
   }
 
-  vpc_security_group_ids = [aws_security_group.allow_ping.id]
+  key_name = "ec2-polkadot-node-keypair"
+
+  vpc_security_group_ids = [aws_security_group.allow_ping.id, aws_security_group.allow_ssh.id]
 
   tags = {
     Name = "PolkadotNode${count.index + 1}"
