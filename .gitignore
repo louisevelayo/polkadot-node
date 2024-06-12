@@ -1,3 +1,5 @@
 .terraform/
+collections/
+
 terraform.tfstate
 terraform.tfstate.backup

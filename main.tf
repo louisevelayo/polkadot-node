@@ -69,7 +69,7 @@ resource "aws_key_pair" "my_keypair" {
 # free-tier won't allow me to provision the same specs as outlined in the docs
 resource "aws_instance" "pd_node" {
   count         = 2
-  ami           = "ami-0eb9d67c52f5c80e5"
+  ami           = "ami-0cf2b4e024cdb6960"
   instance_type = "t2.micro" # should use bigger instance type to meet network requirements
 
   root_block_device {

@@ -1,9 +1,57 @@
-- name: My first play
+- name: Deploy Polkadot on EC2 instances
   hosts: aws_cluster
+  become: true
   tasks:
-   - name: Ping my hosts
-     ansible.builtin.ping:
+    - name: Ping my hosts 
+      ansible.builtin.ping:
+      
+    - name: Update apt package index
+      ansible.builtin.apt:
+        update_cache: yes
 
-   - name: Print message
-     ansible.builtin.debug:
-      msg: Hello world
+    - name: Install required packages
+      ansible.builtin.apt:
+        name: 
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+
+    - name: Install Docker
+      ansible.builtin.apt:
+        name: docker-ce
+        state: present
+
+    - name: Start Docker service
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull Polkadot Docker image
+      community.docker.docker_image:
+        name: parity/polkadot
+        tag: latest
+        source: pull
+
+    - name: Run Polkadot container
+      community.docker.docker_container:
+        name: polkadot
+        image: parity/polkadot:v1.0.0
+        state: started
+        restart_policy: always
+        ports:
+          - "30333:30333"   # P2P port
+          - "9933:9933"     # RPC port
+          - "9944:9944"     # WebSocket port
+          - "9615:9615"     # Prometheus port
