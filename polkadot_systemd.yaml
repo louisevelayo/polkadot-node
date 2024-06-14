@@ -1,0 +1,46 @@
+- name: Deploy Polkadot on EC2 instances
+  hosts: aws_cluster
+  become: true
+  tasks:
+    - name: Ping my hosts 
+      ansible.builtin.ping:
+      
+    - name: Update apt package index
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install required packages
+      ansible.builtin.apt:
+        name: 
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - wget
+        state: present
+
+    - name: Download Polkadot binary
+      ansible.builtin.get_url:
+        url: https://github.com/paritytech/polkadot/releases/download/v1.0.0/polkadot
+        dest: /usr/local/bin/polkadot
+        mode: '0755'
+
+    - name: Create Polkadot systemd service file
+      ansible.builtin.template:
+        src: polkadot.service.j2
+        dest: /etc/systemd/system/polkadot.service
+        mode: '0644'
+
+    - name: Reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Enable Polkadot service
+      ansible.builtin.systemd:
+        name: polkadot
+        enabled: yes
+
+    - name: Start Polkadot service
+      ansible.builtin.systemd:
+        name: polkadot
+        state: started
