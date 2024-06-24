@@ -1,0 +1,13 @@
+[Unit]
+Description=Polkadot Node
+After=network-online.target
+
+[Service]
+User=root
+ExecStart=/usr/local/bin/polkadot
+Restart=always
+RestartSec=5
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

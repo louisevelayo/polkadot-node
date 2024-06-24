@@ -44,3 +44,9 @@
       ansible.builtin.systemd:
         name: polkadot
         state: started
+
+    - name: Check status of Polkadot service
+      ansible.builtin.systemd:
+        name: polkadot
+        state: started
+      register: polkadot_service_status
