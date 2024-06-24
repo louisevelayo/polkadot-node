@@ -3,3 +3,6 @@ collections/
 
 terraform.tfstate
 terraform.tfstate.backup
+
+terminate.yaml
+inventory.yaml
