@@ -1,10 +1,10 @@
 aws_cluster:
   hosts:
     pdn1:
-      ansible_host: ec2-54-218-228-231.us-west-2.compute.amazonaws.com
-      ansible_ssh_private_key_file: ~/.ssh/ec2-polkadot-node-keypair
+      ansible_host: "your.ec2.host.domain"
+      ansible_ssh_private_key_file: <insert path to private key>
     pdn2:
-      ansible_host: ec2-54-218-186-127.us-west-2.compute.amazonaws.com
-      ansible_ssh_private_key_file: ~/.ssh/ec2-polkadot-node-keypair
+      ansible_host: "your.ec2.host.domain"
+      ansible_ssh_private_key_file: <insert path to private key>
   vars:
     ansible_user: ubuntu
