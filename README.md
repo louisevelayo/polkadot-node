@@ -1,4 +1,4 @@
-# Deploy Polkadot Node on EC2 Instances with Ansible and Terraform
+# polkadot-node
 
 This repository contains Terraform configuration files to provision AWS EC2 instances and Ansible playbooks to deploy a Polkadot node on the instances. There are two approaches provided for deploying Polkadot:
 
@@ -16,6 +16,8 @@ Before running the Terraform and Ansible scripts, ensure you have the following 
 ## Files
 
 - `main.tf`: The main Terraform configuration file for provisioning AWS EC2 instances with SSH access
+- `variables.tf`: Terraform file to define variables
+- `inventory.yaml`: File to list known hosts - in this case, the two EC2 instances provisioned via terraform.
 - `deploy_pdn_v1.0.0yaml`: The Ansible playbook for deploying Polkadot using Docker.
 - `polkadot_systemd.yaml`: The main Ansible playbook for deploying Polkadot using a binary and systemd service.
 - `polkadot.service.j2`: The Jinja2 template for the Polkadot systemd service file.
