@@ -3,6 +3,7 @@ collections/
 
 terraform.tfstate
 terraform.tfstate.backup
+terraform.tfvars
 
 terminate.yaml
 inventory.yaml
